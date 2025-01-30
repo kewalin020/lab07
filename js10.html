@@ -1,0 +1,111 @@
+<!-- ตัวอย่างที่ 10: การสร้างเกมง่ายๆ -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ตัวอย่างที่ 10</title>
+    <style>
+      #gameArea {
+        width: 300px;
+        height: 300px;
+        border: 1px solid black;
+        position: relative;
+        display: none;
+      }
+
+      #target {
+        width: 30px;
+        height: 30px;
+        background-color: red;
+        position: absolute;
+        cursor: pointer;
+      }
+
+      #startButton {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: green;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #startButton:hover {
+        background-color: darkgreen;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h3>เกมคลิกเป้าหมาย</h3>
+    <p>คะแนน: <span id="score">0</span></p>
+    <p id="timer">เวลา: 30 วินาที</p>
+    <button id="startButton" onclick="startGame()">เริ่มเกม</button>
+    <div id="gameArea">
+      <div id="target" onclick="hitTarget()"></div>
+    </div>
+
+    <script>
+      let score = 0;
+      let timeLeft = 30;
+      let timerInterval;
+
+      function startGame() {
+        // Reset score and timer
+        score = 0;
+        timeLeft = 30;
+        document.getElementById("score").textContent = score;
+        document.getElementById(
+          "timer"
+        ).textContent = `เวลา: ${timeLeft} วินาที`;
+
+        // Show game area and hide start button
+        document.getElementById("gameArea").style.display = "block";
+        document.getElementById("startButton").style.display = "none";
+
+        // Start countdown timer
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          document.getElementById(
+            "timer"
+          ).textContent = `เวลา: ${timeLeft} วินาที`;
+
+          if (timeLeft <= 0) {
+            endGame();
+          }
+        }, 1000);
+      }
+
+      function endGame() {
+        // Stop timer
+        clearInterval(timerInterval);
+
+        // Hide game area and show start button
+        document.getElementById("gameArea").style.display = "none";
+        document.getElementById("startButton").style.display = "inline-block";
+
+        // Display game over message
+        alert("Game Over! คะแนนของคุณคือ: " + score);
+      }
+
+      function hitTarget() {
+        // เพิ่มคะแนน
+        score++;
+        document.getElementById("score").textContent = score;
+
+        // สุ่มตําแหน่งใหม่
+        let gameArea = document.getElementById("gameArea");
+        let target = document.getElementById("target");
+
+        let maxX = gameArea.offsetWidth - target.offsetWidth;
+        let maxY = gameArea.offsetHeight - target.offsetHeight;
+
+        let newX = Math.floor(Math.random() * maxX);
+        let newY = Math.floor(Math.random() * maxY);
+
+        target.style.left = newX + "px";
+        target.style.top = newY + "px";
+      }
+    </script>
+  </body>
+</html>
